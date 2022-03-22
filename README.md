@@ -10,6 +10,6 @@ A simple IRC bot written in Python.
 
 # Current Features:
 
--Saying Hi to weakgreeter will trigger a greeting back to that user in a random language
+-When a user says "Hi weakgreeter" weakgreeter will respond with a greeting in a random language
 
--When a user posts a URL in chat, weakgreeter will read the webpage's title out in chat
+-When a user posts a URL in chat weakgreeter will read the webpage's title out in chat
