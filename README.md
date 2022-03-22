@@ -5,6 +5,7 @@ A simple IRC bot written in Python.
 Requires the following non standard modules:
 
 -beautifulsoup (https://pypi.org/project/beautifulsoup4/) 
+
 -requests (https://pypi.org/project/requests/)
 
 Current Features:
