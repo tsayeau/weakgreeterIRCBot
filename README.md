@@ -8,7 +8,7 @@ A simple IRC bot written in Python.
 
 -requests (https://pypi.org/project/requests/)
 
-# current Features:
+# Current Features:
 
 -Saying Hi to weakgreeter will trigger a greeting back to that user in a random language
 
