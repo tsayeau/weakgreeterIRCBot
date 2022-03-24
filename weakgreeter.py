@@ -96,6 +96,11 @@ def stockMarket(quote):
     Return(quote)
 
 
+# If a user asks a question with .ask weakgreeter will respond with a random answer
+def ask(name):
+    talk(random.choice(answer) + " " + name)
+
+
 def main():
     joinChannel(channel)
     while 1:
@@ -111,9 +116,9 @@ def main():
             message = ircChat.split("PRIVMSG", 1)[1].split(":", 1)[1]
             # If someone says hi don't be rude, say hi back!
             if (
-                message.find("Hi " + botNickName)
+                message.find("Hi " + botNickName) != -1
                 and name == "trefirefem" != -1
-                or message.find("hi " + botNickName)
+                or message.find("hi " + botNickName) != -1
                 and name == "trefirefem" != -1
             ):
                 talk(
@@ -137,6 +142,9 @@ def main():
             elif message.find(".stock") != -1:
                 stonk = message = ircChat.split("PRIVMSG", 1)[1].split(".stock", 1)[1]
                 stockMarket(stonk.lstrip())
+            # Look for the .ask feature and respond
+            elif message.find(".ask") != -1:
+                ask(name)
 
         # Respond to PINGs from the server as they appear
         else:
