@@ -19,3 +19,5 @@ A simple IRC bot written in Python.
 -When a user types .stock followed by a ticker symbol i.e. ".stock FB" weakgreeter will reply with the current price and the daily gain
 
 -When a user types .ask and asks a question weakgreeter will respond with a random answer to that question.
+
+-When a user types .praise "username" weakgreeter will respond to the listed user with a random message to praise them.
