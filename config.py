@@ -32,3 +32,10 @@ answer = [
     "HELL YEAH",
     "👍💯💯💯💯",
 ]
+# Various messages of praise for the .praise function
+motivation = [
+    "You're doing good Work,",
+    "Great job,",
+    "Awesome pics. Great size. Look thick. Solid. Tight. Keep us all posted on your continued progress with any new progress pics or vid clips. Show us what you got man. Wanna see how freakn' huge, solid, thick and tight you can get. Thanks for the motivation, ",
+    "We did it,",
+]
