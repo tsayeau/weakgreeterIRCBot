@@ -97,8 +97,13 @@ def stockMarket(quote):
 
 
 # If a user asks a question with .ask weakgreeter will respond with a random answer
-def ask(name):
-    talk(random.choice(answer) + " " + name)
+# If a user asks a question with multiple values weakgreeter will randomize the values and spit out an answer
+def ask(name, question):
+    if " or " in question:
+        question = re.split(r"or", question)
+        talk(random.choice(question) + " " + name)
+    else:
+        talk(random.choice(answer) + " " + name)
 
 
 def main():
@@ -144,7 +149,8 @@ def main():
                 stockMarket(stonk.lstrip())
             # Look for the .ask feature and respond
             elif message.find(".ask") != -1:
-                ask(name)
+                question = message = ircChat.split("PRIVMSG", 1)[1].split(".ask", 1)[1]
+                ask(name, question)
 
         # Respond to PINGs from the server as they appear
         else:
