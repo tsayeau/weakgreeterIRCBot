@@ -16,7 +16,7 @@ A simple IRC bot written in Python.
 
 -When a user posts a URL in chat weakgreeter will read the webpage's title out in chat
 
-Commands:
+- Commands:
 
 - Stocks: .stock followed by a ticker symbol, weakgreeter will reply with the current price and the daily gain. ".stock FB"
 
