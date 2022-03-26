@@ -2,14 +2,6 @@
 
 A simple IRC bot written in Python.
 
-# weakgreeter requires the following non standard modules:
-
--beautifulsoup (https://pypi.org/project/beautifulsoup4/) 
-
--requests (https://pypi.org/project/requests/)
-
--yfinance (https://pypi.org/project/yfinance/)
-
 # Current Features:
 
 -When a user says "Hi weakgreeter" weakgreeter will respond with a greeting in a random language.
@@ -28,3 +20,15 @@ Commands:
 - Time: .time followed by a location, weakgreeter will respond with the local time of that location. ".time Toronto".
 
 - Help: .help, weakgreeter will respond with the command menu.
+
+# weakgreeter requires the following non standard modules:
+
+-beautifulsoup (https://pypi.org/project/beautifulsoup4/) 
+
+-requests (https://pypi.org/project/requests/)
+
+-yfinance (https://pypi.org/project/yfinance/)
+
+-pytz (https://pypi.org/project/pytz/)
+
+-opencage (https://pypi.org/project/opencage/)
