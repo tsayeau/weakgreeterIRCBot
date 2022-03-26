@@ -22,8 +22,8 @@ Commands:
 
 - Ask: .ask followed by a question, weakgreeter will respond with a random answer to that question. Putting or between values will cause weakgreeter to select one of the values. ".ask go buy toilet paper" ".ask apples or oranges"
 
--Praise: .praise followed by a username, weakgreeter will respond to the listed user with a random message to praise them. ".praise username"
+- Praise: .praise followed by a username, weakgreeter will respond to the listed user with a random message to praise them. ".praise username"
 
--Time: .time followed by a location, weakgreeter will respond with the local time of that location. ".time Toronto"
+- Time: .time followed by a location, weakgreeter will respond with the local time of that location. ".time Toronto"
 
--Help: .help, weakgreeter will respond with the command menu
+- Help: .help, weakgreeter will respond with the command menu
