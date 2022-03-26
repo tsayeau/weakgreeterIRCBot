@@ -21,3 +21,5 @@ A simple IRC bot written in Python.
 -When a user types .ask and asks a question weakgreeter will respond with a random answer to that question.
 
 -When a user types .praise "username" weakgreeter will respond to the listed user with a random message to praise them.
+
+-When a user types .time "location" weakgreeter will respond with the local time of that location.
