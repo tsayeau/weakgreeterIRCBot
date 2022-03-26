@@ -17,7 +17,7 @@ import yfinance as yf
 # pull the variables from the config file
 from config import *
 from bs4 import BeautifulSoup
-from numpy import empty
+from numpy import empty, true_divide
 from datetime import datetime
 from pytz import timezone
 from opencage.geocoder import OpenCageGeocode
@@ -116,7 +116,7 @@ def ask(name, question):
 
 # Praise the user selected by the person running the command with a random message of praise in the config.py file
 def praise(name):
-    talk(random.choice(motivation) + name.strip() + "!")
+    talk(random.choice(motivation) + " " + name.strip() + "!")
     print("Praise sent to " + name.strip())
 
 
@@ -136,6 +136,50 @@ def localTime(city):
     else:
         talk("Sorry, can't find " + city.strip())
         print("Local time not found  for " + city.strip())
+
+
+# Roll a die with the amount of sides defined by the user with the .roll command ".roll 6" 
+# Defaults to 6 if the input is invalid
+def rollTheDice(dice, name):
+    if (dice.strip()).isdigit() == True and dice.strip() != "0" and dice.strip() != "":
+        valDice = random.randint(1, int(dice))
+        talk(
+            name
+            + " "
+            + "rolled a "
+            + str(dice).strip()
+            + " sided die. It has landed on "
+            + str(valDice).strip()
+            + "."
+        )
+        if valDice == 69:
+            talk("Nice.")
+            print(str(valDice) + " was rolled.")
+        elif valDice == 420:
+            talk("Blaze it.")
+            print(str(valDice) + " was rolled.")
+        else:
+            print(str(valDice) + " was rolled.")
+    else:
+        dice = 6
+        valDice = random.randint(1, dice)
+        talk(
+            name
+            + " "
+            + "rolled a "
+            + str(dice).strip()
+            + " sided die. It has landed on "
+            + str(valDice).strip()
+            + "."
+        )
+        if valDice == 69:
+            talk("Nice.")
+            print("Invalid input, rolled dice as a 6")
+        elif valDice == 420:
+            talk("Blaze it.")
+            print("Invalid input, rolled dice as a 6")
+        else:
+            print("Invalid input, rolled dice as a 6")
 
 
 def main():
@@ -190,9 +234,26 @@ def main():
             elif message.find(".praise") != -1:
                 name = message = ircChat.split("PRIVMSG", 1)[1].split(".praise", 1)[1]
                 praise(name)
+            # Look for the .time command and provide the time base on the location the user has specified
             elif message.find(".time") != -1:
                 city = message = ircChat.split("PRIVMSG", 1)[1].split(".time", 1)[1]
                 localTime(city)
+            # Look for the .roll command and roll a die based on the amount of sides the user has specified
+            elif message.find(".rtd") != -1:
+                dice = message = ircChat.split("PRIVMSG", 1)[1].split(".rtd", 1)[1]
+                rollTheDice(dice, name)
+            # Provide a user with a command menu when they type .help
+            elif message.find(".help") != -1:
+                talk("Help Menu: .help returns a list of commands.")
+                talk(
+                    "Stock: .stock 'Ticker Symbol' i.e. '.stock TSLA' will provide you with a stock quote."
+                )
+                talk(
+                    "Ask: .ask '.ask are cargo shorts cool', use or between choices for the bot to select a choice '.ask apple or orange'."
+                )
+                talk("Praise: .praise '.praise USERNAME'.")
+                talk("Time: .time '.time Dublin, Ireland'.")
+                talk("Roll the Dice: .rtd '.rtd 20' will roll a 20 sided die.")
         # Respond to PINGs from the server as they appear
         else:
             if ircChat.find("PING :") != -1:
