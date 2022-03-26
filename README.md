@@ -16,10 +16,14 @@ A simple IRC bot written in Python.
 
 -When a user posts a URL in chat weakgreeter will read the webpage's title out in chat
 
--When a user types .stock followed by a ticker symbol i.e. ".stock FB" weakgreeter will reply with the current price and the daily gain
+Commands:
 
--When a user types .ask and asks a question weakgreeter will respond with a random answer to that question.
+- Stocks: .stock followed by a ticker symbol, weakgreeter will reply with the current price and the daily gain. ".stock FB"
 
--When a user types .praise "username" weakgreeter will respond to the listed user with a random message to praise them.
+- Ask: .ask followed by a question, weakgreeter will respond with a random answer to that question. Putting or between values will cause weakgreeter to select one of the values. ".ask go buy toilet paper" ".ask apples or oranges"
 
--When a user types .time "location" weakgreeter will respond with the local time of that location.
+-Praise: .praise followed by a username, weakgreeter will respond to the listed user with a random message to praise them. ".praise username"
+
+-Time: .time followed by a location, weakgreeter will respond with the local time of that location. ".time Toronto"
+
+-Help: .help, weakgreeter will respond with the command menu
