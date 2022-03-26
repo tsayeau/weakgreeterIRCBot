@@ -4,7 +4,6 @@
 # and yfinance (https://pypi.org/project/yfinance/)
 
 # Import modules needed to weakgreeter
-from ast import Return
 import socket
 import time
 import config
@@ -14,10 +13,15 @@ import requests
 import re
 import yfinance as yf
 
+
 # pull the variables from the config file
 from config import *
 from bs4 import BeautifulSoup
 from numpy import empty
+from datetime import datetime
+from pytz import timezone
+from opencage.geocoder import OpenCageGeocode
+from ast import Return
 
 # Connect to IRC server and authenticate with nickserv
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -31,7 +35,7 @@ irc.send(
         + " "
         + botNickName
         + " "
-        + "WeakGreeterIRCBOT"
+        + "weakGreeterIRCBOT"
         + "\n",
         "UTF-8",
     )
@@ -91,8 +95,10 @@ def stockMarket(quote):
             + str((round(float(dailyGrowth), 2)))
             + " %"
         )
+        print("Stock was found, sending to IRC Channel")
     else:
         talk("idk that stock u paper handed fool")
+        print("Stock not found")
     Return(quote)
 
 
@@ -101,14 +107,35 @@ def stockMarket(quote):
 def ask(name, question):
     if " or " in question:
         question = re.split(r"or", question)
-        talk(random.choice(question) + " " + name)
+        talk(random.choice(question) + " " + name.strip())
+        print("Choice made and sent to " + name.strip())
     else:
-        talk(random.choice(answer) + " " + name)
+        talk(random.choice(answer) + " " + name.strip())
+        print("Random answer sent to " + name.strip())
 
 
 # Praise the user selected by the person running the command with a random message of praise in the config.py file
 def praise(name):
-    talk(random.choice(motivation) + name + "!")
+    talk(random.choice(motivation) + name.strip() + "!")
+    print("Praise sent to " + name.strip())
+
+
+# Get the time of a city specificed by the user running the .time command
+# uses api key in config.py for https://opencagedata.com/
+# Grabs the users location and outputs the timezone
+def localTime(city):
+    geocoder = OpenCageGeocode(key)
+    results = geocoder.geocode(city)
+    if results != []:
+        tzString = timezone(results[0]["annotations"]["timezone"]["name"])
+        tzString = datetime.now(tzString)
+        onlyCity = city.split(",")
+        city = onlyCity[0]
+        talk("The time in " + city.strip() + " is " + tzString.strftime("%H:%M."))
+        print("Local time sent for " + city.strip())
+    else:
+        talk("Sorry, can't find " + city.strip())
+        print("Local time not found  for " + city.strip())
 
 
 def main():
@@ -134,11 +161,13 @@ def main():
                 talk(
                     "Hei trefirefem! Have you got your dad strength yet, or do you still not bench 2pl8?"
                 )
+                print("Greeting sent to trefirefem")
             elif (
                 message.find("Hi " + botNickName) != -1
                 or message.find("hi " + botNickName) != -1
             ):
                 talk(random.choice(greetings) + " " + name)
+                print("Greeting sent to " + name)
 
             # Look for links in chat and use BeautifulSoup to get the title back
             elif message.find("https://") != -1:
@@ -147,6 +176,7 @@ def main():
                 soup = BeautifulSoup(page.text, "html.parser")
                 for title in soup.find_all("title"):
                     talk(name + "'s link is: " + title.get_text())
+                print("URL title sent")
 
             # Look for stock quotes using the .stock command
             elif message.find(".stock") != -1:
@@ -160,6 +190,9 @@ def main():
             elif message.find(".praise") != -1:
                 name = message = ircChat.split("PRIVMSG", 1)[1].split(".praise", 1)[1]
                 praise(name)
+            elif message.find(".time") != -1:
+                city = message = ircChat.split("PRIVMSG", 1)[1].split(".time", 1)[1]
+                localTime(city)
         # Respond to PINGs from the server as they appear
         else:
             if ircChat.find("PING :") != -1:
