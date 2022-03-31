@@ -1,6 +1,6 @@
 # weakgreeterIRCBot
 
-A simple IRC bot written in Python.
+A simple IRC bot written in Python, using a PostgreSQL database.
 
 # Current Features:
 
