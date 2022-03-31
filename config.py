@@ -1,4 +1,5 @@
 # Bot configurations and passwords to be sent to weakgreeter.py
+import psycopg2
 
 server = "server"  # IRC server address
 port = 6667  # port number your IRC server uses
@@ -8,7 +9,7 @@ password = "password"  # password you use to authenticate against the server's n
 
 # Various greetings for weakgreeter to say when a user says hi to weakgreeter
 greetings = [
-    "Aloha",
+    "Aloha 🌸 🌺",
     "Bonjour",
     "Hola",
     "Hi",
@@ -25,6 +26,7 @@ answer = [
     "yes",
     "no",
     "maybe",
+    "ask SlDeviant",
     "I don't think so",
     "that's a stupid question",
     "of course",
@@ -32,6 +34,7 @@ answer = [
     "HELL YEAH",
     "👍💯💯💯💯",
 ]
+
 # Various messages of praise for the .praise function
 motivation = [
     "You're doing good Work,",
@@ -41,3 +44,8 @@ motivation = [
 ]
 # Api key for https://opencagedata.com/ for .time command
 key = ""
+
+# connect string for the sql db
+con = psycopg2.connect(
+    host="", user="", password="", dbname=""
+)

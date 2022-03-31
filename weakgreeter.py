@@ -2,8 +2,12 @@
 # weakgreet requires beautifulsoup (https://pypi.org/project/beautifulsoup4/)
 # and requests (https://pypi.org/project/requests/)
 # and yfinance (https://pypi.org/project/yfinance/)
+# and pytz (https://pypi.org/project/pytz/)
+# and opencage (https://pypi.org/project/opencage/)
 
 # Import modules needed to weakgreeter
+from email.quoprimime import quote
+from operator import contains
 import socket
 import time
 import config
@@ -12,6 +16,7 @@ import bs4
 import requests
 import re
 import yfinance as yf
+import psycopg2
 
 
 # pull the variables from the config file
@@ -138,7 +143,7 @@ def localTime(city):
         print("Local time not found  for " + city.strip())
 
 
-# Roll a die with the amount of sides defined by the user with the .roll command ".roll 6" 
+# Roll a die with the amount of sides defined by the user with the .roll command ".roll 6"
 # Defaults to 6 if the input is invalid
 def rollTheDice(dice, name):
     if (dice.strip()).isdigit() == True and dice.strip() != "0" and dice.strip() != "":
@@ -180,6 +185,56 @@ def rollTheDice(dice, name):
             print("Invalid input, rolled dice as a 6")
         else:
             print("Invalid input, rolled dice as a 6")
+
+
+# Grab a quote from the postgresql database, if the quote number is not specified pick a random quote
+def quoteFetch(quote):
+    if (
+        (quote.strip()).isdigit() == True
+        and quote.strip() != "0"
+        and quote.strip() != ""
+    ):
+        con
+        print("Database opened successfully")
+        cur = con.cursor()
+        print(int(quote))
+        cur.execute("select quote from quotes where quote_id = (%s)", (quote,))
+        quoteGot = cur.fetchone()
+        print(quoteGot)
+        if quoteGot == None:
+            talk("Quote not found")
+        else:
+            quoteGot = [i for i in quoteGot]
+            talk(str(quoteGot)[1:-1].strip("'"))
+            cur.close()
+
+    else:
+        con
+        print("Database opened successfully")
+        cur = con.cursor()
+        cur.execute("select quote from quotes order by RANDOM() limit 1;")
+        quoteGot = cur.fetchone()
+        print(quoteGot)
+        quoteGot = [i for i in quoteGot]
+        talk(str(quoteGot)[1:-1].strip("'"))
+        cur.close()
+
+
+# Add a new quote to the database with .addquote "string"
+def addQuote(newQuote):
+    if newQuote.strip() != "0" and newQuote.strip() != "":
+        con
+        print("Database opened successfully")
+        cur = con.cursor()
+        cur.execute("insert into quotes(quote) values (%s)", (newQuote.strip(),))
+        cur.execute("SELECT quote FROM quotes ORDER BY quote_id DESC limit 1;")
+        addedQuote = cur.fetchone()
+        addedQuote = [i for i in addedQuote]
+        talk("Added quote: " + (str(addedQuote)[1:-1].strip("'")))
+        con.commit()
+        cur.close()
+    else:
+        talk("Can't add that.")
 
 
 def main():
@@ -242,6 +297,14 @@ def main():
             elif message.find(".rtd") != -1:
                 dice = message = ircChat.split("PRIVMSG", 1)[1].split(".rtd", 1)[1]
                 rollTheDice(dice, name)
+            elif message.find(".quote") != -1:
+                quote = message = ircChat.split("PRIVMSG", 1)[1].split(".quote", 1)[1]
+                quoteFetch(quote)
+            elif message.find(".addquote") != -1:
+                newQuote = message = ircChat.split("PRIVMSG", 1)[1].split(
+                    ".addquote", 1
+                )[1]
+                addQuote(newQuote)
             # Provide a user with a command menu when they type .help
             elif message.find(".help") != -1:
                 talk("Help Menu: .help returns a list of commands.")
@@ -254,6 +317,8 @@ def main():
                 talk("Praise: .praise '.praise USERNAME'.")
                 talk("Time: .time '.time Dublin, Ireland'.")
                 talk("Roll the Dice: .rtd '.rtd 20' will roll a 20 sided die.")
+                talk("Quotes: .quote pulls a random quote from the database, .quote 1 pulls quote 1 etc.")
+                talk("Quotes: .addquote '.addquote ""Thrusty: HI GUYS""' will add that quote to the database.")
         # Respond to PINGs from the server as they appear
         else:
             if ircChat.find("PING :") != -1:
