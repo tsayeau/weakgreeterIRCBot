@@ -19,6 +19,10 @@ Commands:
 
 - Time: .time followed by a location, weakgreeter will respond with the local time of that location. ".time Toronto".
 
+- Quote: .quote will pull a random quote from the database, .quote followed by a number will pull that specified quote from the database
+
+- AddQuote: .addquote will add a new string of text to the quote database. ".addquote trefirefem: WE DID IT REDDIT!"
+
 - Help: .help, weakgreeter will respond with the command menu.
 
 # weakgreeter requires the following non standard modules:
@@ -32,3 +36,5 @@ Commands:
 -pytz (https://pypi.org/project/pytz/)
 
 -opencage (https://pypi.org/project/opencage/)
+
+-psycopg2 (https://pypi.org/project/psycopg2/)
