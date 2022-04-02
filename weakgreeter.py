@@ -4,12 +4,14 @@
 # and yfinance (https://pypi.org/project/yfinance/)
 # and pytz (https://pypi.org/project/pytz/)
 # and opencage (https://pypi.org/project/opencage/)
+# and pyscopg2 (https://pypi.org/project/psycopg2/)
 
 # Import modules needed to weakgreeter
 from email.quoprimime import quote
 from operator import contains
 import socket
 import time
+from wsgiref import headers
 import config
 import random
 import bs4
@@ -272,9 +274,8 @@ def main():
             elif message.find("https://") != -1:
                 url = message = ircChat.split("PRIVMSG", 1)[1].split(":", 1)[1]
                 page = requests.get((",".join(getUrl(url))))
-                soup = BeautifulSoup(page.text, "html.parser")
-                for title in soup.find_all("title"):
-                    talk(name + "'s link is: " + title.get_text())
+                soup = BeautifulSoup(page.text, "lxml")
+                talk(name + "'s link is: " + soup.title.string.replace('"', ""))
                 print("URL title sent")
 
             # Look for stock quotes using the .stock command
@@ -317,8 +318,11 @@ def main():
                 talk("Praise: .praise '.praise USERNAME'.")
                 talk("Time: .time '.time Dublin, Ireland'.")
                 talk("Roll the Dice: .rtd '.rtd 20' will roll a 20 sided die.")
-                talk("Quotes: .quote pulls a random quote from the database, .quote 1 pulls quote 1 etc.")
-                talk("Quotes: .addquote '.addquote ""Thrusty: HI GUYS""' will add that quote to the database.")
+                talk(
+                    "Quotes: .quote pulls a random quote from the database, .quote 1 pulls quote 1 etc., .addquote '.addquote "
+                    "Thrusty: HI GUYS"
+                    "' will add that quote to the database."
+                )
         # Respond to PINGs from the server as they appear
         else:
             if ircChat.find("PING :") != -1:
