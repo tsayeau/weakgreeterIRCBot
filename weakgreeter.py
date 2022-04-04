@@ -5,20 +5,16 @@
 # and pytz (https://pypi.org/project/pytz/)
 # and opencage (https://pypi.org/project/opencage/)
 # and pyscopg2 (https://pypi.org/project/psycopg2/)
+# and wikipedia (https://pypi.org/project/wikipedia/)
 
 # Import modules needed to weakgreeter
-from email.quoprimime import quote
-from operator import contains
+from lib2to3.pgen2.token import NAME
 import socket
-import time
-from wsgiref import headers
-import config
 import random
-import bs4
 import requests
 import re
 import yfinance as yf
-import psycopg2
+import wikipedia
 
 
 # pull the variables from the config file
@@ -189,6 +185,22 @@ def rollTheDice(dice, name):
             print("Invalid input, rolled dice as a 6")
 
 
+# Scrape Wikipedia for a 2 sentence summary of a topic based on user input
+def wiki(wikiq, name):
+    if wikiq.split() != []:
+        wikipedia.set_lang("en")
+        try:
+            result = wikipedia.summary(wikiq, sentences=2, auto_suggest=False)
+            talk(name + ": " + result)
+        except wikipedia.DisambiguationError as e:
+            result = wikipedia.summary(e.options[0], sentences=2)
+            talk(name + ": " + result)
+        except wikipedia.exceptions.PageError as e:
+            talk(name + " wikipedia doesn't have time for your shit 💩💩💩💩")
+    else:
+        talk("YOU GOTTA ENTER SOMETHING TO SEARCH " + name.upper() + " 😬😬😬😬😬💩💩💩💩👀")
+
+
 # Grab a quote from the postgresql database, if the quote number is not specified pick a random quote
 def quoteFetch(quote):
     if (
@@ -274,10 +286,13 @@ def main():
             elif message.find("https://") != -1:
                 url = message = ircChat.split("PRIVMSG", 1)[1].split(":", 1)[1]
                 page = requests.get((",".join(getUrl(url))))
-                soup = BeautifulSoup(page.text, "lxml")
-                talk(name + "'s link is: " + soup.title.string.replace('"', ""))
-                print("URL title sent")
-
+                try:
+                    soup = BeautifulSoup(page.text, "lxml")
+                    talk(name + "'s link is: " + soup.title.string.replace('"', ""))
+                    print("URL title sent")
+                except:
+                    print("No Title in URL")
+                    pass
             # Look for stock quotes using the .stock command
             elif message.find(".stock") != -1:
                 stonk = message = ircChat.split("PRIVMSG", 1)[1].split(".stock", 1)[1]
@@ -298,6 +313,10 @@ def main():
             elif message.find(".rtd") != -1:
                 dice = message = ircChat.split("PRIVMSG", 1)[1].split(".rtd", 1)[1]
                 rollTheDice(dice, name)
+            # Look for the .wiki command and provide a 2 sentance summary of the topic to the user
+            elif message.find(".wiki") != -1:
+                wikiQ = message = ircChat.split("PRIVMSG", 1)[1].split(".wiki", 1)[1]
+                wiki(wikiQ, name)
             elif message.find(".quote") != -1:
                 quote = message = ircChat.split("PRIVMSG", 1)[1].split(".quote", 1)[1]
                 quoteFetch(quote)
@@ -308,21 +327,7 @@ def main():
                 addQuote(newQuote)
             # Provide a user with a command menu when they type .help
             elif message.find(".help") != -1:
-                talk("Help Menu: .help returns a list of commands.")
-                talk(
-                    "Stock: .stock 'Ticker Symbol' i.e. '.stock TSLA' will provide you with a stock quote."
-                )
-                talk(
-                    "Ask: .ask '.ask are cargo shorts cool', use or between choices for the bot to select a choice '.ask apple or orange'."
-                )
-                talk("Praise: .praise '.praise USERNAME'.")
-                talk("Time: .time '.time Dublin, Ireland'.")
-                talk("Roll the Dice: .rtd '.rtd 20' will roll a 20 sided die.")
-                talk(
-                    "Quotes: .quote pulls a random quote from the database, .quote 1 pulls quote 1 etc., .addquote '.addquote "
-                    "Thrusty: HI GUYS"
-                    "' will add that quote to the database."
-                )
+                talk("Help Menu: https://raw.githubusercontent.com/tsayeau/weakgreeterIRCBot/main/commands.txt")
         # Respond to PINGs from the server as they appear
         else:
             if ircChat.find("PING :") != -1:
