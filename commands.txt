@@ -1,0 +1,15 @@
+Help Menu: .help links you to this document.
+ 
+Stock: .stock 'Ticker Symbol' i.e. '.stock TSLA' will provide you with a stock quote.
+
+Ask: .ask '.ask are cargo shorts cool', use or between choices for the bot to select a choice '.ask apple or orange'.
+
+Praise: .praise '.praise USERNAME'.
+
+Time: .time '.time Dublin, Ireland'.
+
+Roll the Dice: .rtd '.rtd 20' will roll a 20 sided die.
+
+Quotes: .quote pulls a random quote from the database, .quote 1 pulls quote 1 etc., .addquote '.addquote Thrusty: HI GUYS' will add that quote to the database."
+
+Wiki: .wiki searchs wikipedia and provides a 2 sentance summary of the page. '.wiki Canada'.
