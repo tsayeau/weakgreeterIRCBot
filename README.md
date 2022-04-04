@@ -23,7 +23,9 @@ Commands:
 
 - AddQuote: .addquote will add a new string of text to the quote database. ".addquote trefirefem: WE DID IT REDDIT!"
 
-- Help: .help, weakgreeter will respond with the command menu.
+- Wiki: .wiki searchs wikipedia and provides a 2 sentance summary of the page. '.wiki Canada'.
+
+- Help: .help, weakgreeter will respond with a link to the command menu.
 
 # weakgreeter requires the following non standard modules:
 
@@ -38,3 +40,5 @@ Commands:
 -opencage (https://pypi.org/project/opencage/)
 
 -psycopg2 (https://pypi.org/project/psycopg2/)
+
+-wikipedia (https://pypi.org/project/wikipedia/)
