@@ -8,14 +8,13 @@
 # and wikipedia (https://pypi.org/project/wikipedia/)
 
 # Import modules needed to weakgreeter
-from lib2to3.pgen2.token import NAME
 import socket
 import random
+import weakref
 import requests
 import re
 import yfinance as yf
 import wikipedia
-
 
 # pull the variables from the config file
 from config import *
@@ -190,11 +189,19 @@ def wiki(wikiq, name):
     if wikiq.split() != []:
         wikipedia.set_lang("en")
         try:
-            result = wikipedia.summary(wikiq, sentences=2, auto_suggest=False)
-            talk(name + ": " + result)
-        except wikipedia.DisambiguationError as e:
-            result = wikipedia.summary(e.options[0], sentences=2)
-            talk(name + ": " + result)
+            wikiSearch = wikipedia.search(wikiq, results=10)
+            wikiResult = wikiSearch[0]
+            result = wikipedia.summary(wikiResult, sentences=2, auto_suggest=False)
+            resultURL = wikipedia.page(wikiResult, auto_suggest=False).url
+            talk(name + ": " + result + " " + resultURL)
+        except wikipedia.exceptions.DisambiguationError as e:
+            disambiguation='\n'.join(str(e).split('\n')[1:])
+            disambiguation=disambiguation.split('\n')
+            wikiSearch = wikipedia.search(disambiguation, results=10)
+            wikiResult = wikiSearch[0]
+            result = wikipedia.summary(wikiResult, sentences=2, auto_suggest=False)
+            resultURL = wikipedia.page(wikiResult, auto_suggest=False).url
+            talk(name + ": " + result + " " + resultURL)
         except wikipedia.exceptions.PageError as e:
             talk(name + " wikipedia doesn't have time for your shit 💩💩💩💩")
     else:
